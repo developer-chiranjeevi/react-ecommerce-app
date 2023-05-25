@@ -1,23 +1,34 @@
 import {useSelector} from "react-redux";
-import ListComp from "../components/ListComp";
-import {List,Card,Typography,CardBody,CardFooter,Button} from "@material-tailwind/react";
+import ListContainerComp from "../components/ListContainerComp";
+import {List,ListItem,Card,Typography,CardBody,CardFooter,Button} from "@material-tailwind/react";
+import {useNavigate} from "react-router-dom";
+
 const Cart = () =>{
 
 
     const cartItems = useSelector((state) => state.cart.items);
     const total = useSelector((state) => state.cart.totalPrice);
+    const navigate = useNavigate();
+
+    const goToHome = () =>{
+        navigate("/");
+    }
     return(
         <div className="w-full flex items-center justify-between">
            <div className="w-full h-screen flex items-center justify-center">
                 <Card className="w-96">
                    <CardBody>
-                    <List>
-                        {
-                            cartItems.map((item) =>(
-                                <ListComp id={item.id} key={item.id} productName={item.product_name} price={item.price}/>
-                            ))
-                        }
-                    </List >
+                    {
+                        (cartItems.length === 0?
+                            <List>
+                                <ListItem>
+                                    <Button onClick={goToHome} color="green" className="w-full">Cart Is Empty. Add Products</Button>
+                                </ListItem>
+                            </List>
+                            :
+                            <ListContainerComp />
+                        )
+                    }
                    </CardBody>
                    <CardFooter className="flex items-center justify-between">
                         <Typography>Grand Total</Typography>
